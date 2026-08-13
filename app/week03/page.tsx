@@ -40,7 +40,7 @@ export default function ToDoList(){
         <div className="p-6 border border-gray-200 rounded-[28px]">
             <div className="mb-4">
                 <p className="text-sm text-gray-600 flex items-center mb-2 font-medium">
-                    TO DO LIST
+                    TO DO LIST 
                     
                 </p>
                 <div className="text-gray-900 font-bold text-xl space-y-1 ">
