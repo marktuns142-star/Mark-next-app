@@ -5,6 +5,9 @@ import Footer from "../components/footer";
 import { dataItem, appendItem } from "../data/dataItem";
 import { useState } from "react";
 import ToDoList from "../week03/page";
+import ToDoFrom from "./components/ToDoFrom";
+import Modal from "./components/Modal";
+
 
 export default function toDoList(){
      
@@ -12,6 +15,7 @@ export default function toDoList(){
     const [Tasks, setTasks] = useState(toDoList);
     const [numOfTask, setNoft] = useState(Tasks.length);
     const [status, setStatus] = useState(null);
+    const [open, setOpen] = useState(false);
 
     const filteredTasks = 
      status == null ? Tasks
@@ -31,14 +35,14 @@ export default function toDoList(){
     return <span style={{ color: "green"}}>กำลังศึกษาอยู่</span>;
     return <span style={{ color: "rad"}}>ไม่ได้เป็นนักศึกษาแล้วนะ</span>;
   }
- const addTask = () => {
+ const addTask = (tietle, status) => {
     const newTask ={
         id: Tasks.length+1,
-        title: "ทดสอบเพิ่มงาน",
+        title: tietle,
         desc: "รายละเอียดของงานที่เพิ่ม",
         date_added: "13/08/2569",
         author: "Thanakron",
-        status: true
+        status: status
 
     };
     
@@ -49,8 +53,19 @@ export default function toDoList(){
     console.log(`Name: ${name} `);
     console.log(`Major: ${major} `); 
 
+
+    const onEdit = (t) => {
+        alert(`งานที่คุณต้องการแก้ไข ${t}`);
+    }
+    const onDelete = (id) => {
+        alert(`คุณต้องการข้อมูล รหัสงาน ${id}?`)
+    }
+    
+    
+    
     const tmp = filteredTasks.map((item,index) => {
     const {id, title, desc, author, date_added, status} = item;
+    const [selectedTask, setSelectedTask] = useState(null);
     
     return (<div className="mx-25  w-full max-w-sm p-6 bg-white border border-gray-200 rounded-xl shadow-md text-black" key={id}>
       หัวข้อ {title}
@@ -58,7 +73,36 @@ export default function toDoList(){
       วันที่ {date_added}
       ผู้เขียน {author}
       สถานะ {isActive(status)}
-      </div>);
+      
+    <div className="flex gap-2 mt-2">
+   
+    <Modal 
+    open={Boolean(selectedTask)} 
+     onClose={() => setSelectedTask(null)}>
+     {selectedTask && (
+    <div className="p-4 flex flex-col gap-2 text-black">
+      <p><strong>หัวข้อ:</strong> {selectedTask.title}</p>
+      <p><strong>คำอธิบาย:</strong> {selectedTask.desc}</p>
+      <p><strong>วันที่:</strong> {selectedTask.date_added}</p>
+      <p><strong>ผู้เขียน:</strong> {selectedTask.author}</p>
+      <p><strong>สถานะ:</strong> {isActive(selectedTask.status)}</p>
+    </div>
+    )}
+    </Modal>
+    {/* View */}
+    <button 
+    onClick={() => setSelectedTask(item)} 
+    className="bg-emerald-500 text-white px-3 py-1 rounded">
+    View
+    </button>
+
+    {/* Edit */}
+    <button onClick={(e) => onEdit(item)} className="bg-yellow-500 text-white px-3 py-1 rounded">Edit</button>
+
+    {/* Delete */}
+    <button onClick={(e) => onDelete(id)} className="bg-red-500 text-white px-3 py-1 rounded">Delete</button>
+    </div>
+    </div>);
      
     
 });
@@ -80,7 +124,9 @@ export default function toDoList(){
                     <p>สถานะ: {isActive(active)}</p>
 
                 </div>
-            </div>
+                 </div>
+                <ToDoFrom addTask={addTask}/>
+
             <div className="text-black bg-brand box-border border border-transparent hover:bg-brand-strong focus:ring-4 focus:ring-brand-medium shadow-xs font-medium leading-5 rounded-base text-sm px-4 py-2.5 focus:outline-none">งานที่ต้องทำ{numOfTask} x รายการ{}</div>
         <div>
             <button className="text-black bg-brand box-border border border-transparent hover:bg-brand-strong focus:ring-4 focus:ring-brand-medium shadow-xs font-medium leading-5 rounded-base text-sm px-4 py-2.5 focus:outline-none" onClick={addTask}>เพิ่มงาน</button>
