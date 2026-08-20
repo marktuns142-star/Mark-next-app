@@ -1,26 +1,46 @@
 "Use client";
 
 import { handler } from "next/dist/build/templates/app-route";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 
-export default function ToDoFrom({ addTask }){
+export default function ToDoFrom({ addTask, editingTask, updateTask, resetEditingTask }){
 
     const [title, setTitle] = useState('');
     const [taskStatus, setTaskstatus] = useState(false);
 
+  useEffect(() => {
+    
+    if(editingTask) 
+    {
+      const { title, status } = editingTask;
+      setTitle(title);
+      setTaskstatus(status);
+    
+    }else{
+      
+      setTitle('');
+      setTaskstatus(false);
+      
+    }
+    }, [editingTask]);
+    
     const handleSubmit = (e) => {
         e.preventDefault();
 
         if(!title.trim()) return;
 
-        addTask(title, taskStatus);
-
+        if(editingTask)
+          updateTask(editingTask.id, title, taskStatus);
+        else
+          addTask(title, taskStatus);
         handleCancel;
+
     }
 
     const handleCancel = (e) => {
         setTitle('');
         setTaskstatus(false);
+        resetEditingTask()
     }
 
     return  (
@@ -51,7 +71,8 @@ export default function ToDoFrom({ addTask }){
         </div>
         <div className="flex mt-4 gap-2 justify-center">
           <button className="bg-blue-600 text-white px-4 py-1 rounded">
-            Add new task
+            {editingTask ? 'updateTask' : 'Add new task'}
+    
           </button>
           <button className="bg-gray-600 text-white px-4 rounded" onClick={handleCancel}>
             Cancel

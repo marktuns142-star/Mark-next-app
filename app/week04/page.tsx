@@ -7,6 +7,7 @@ import { useState } from "react";
 import ToDoList from "../week03/page";
 import ToDoFrom from "./components/ToDoFrom";
 import Modal from "./components/Modal";
+import { title } from "process";
 
 
 export default function toDoList(){
@@ -16,7 +17,12 @@ export default function toDoList(){
     const [numOfTask, setNoft] = useState(Tasks.length);
     const [status, setStatus] = useState(null);
     const [open, setOpen] = useState(false);
+    const [selectedTask, setSelectedTask] = useState(null);
+    const [editingTask,setEditingTask] = useState(null);
 
+    const resetEditingTask = () => setEditingTask(null);
+   
+   
     const filteredTasks = 
      status == null ? Tasks
      : Tasks.filter(
@@ -35,10 +41,10 @@ export default function toDoList(){
     return <span style={{ color: "green"}}>กำลังศึกษาอยู่</span>;
     return <span style={{ color: "rad"}}>ไม่ได้เป็นนักศึกษาแล้วนะ</span>;
   }
- const addTask = (tietle, status) => {
+ const addTask = (title, status) => {
     const newTask ={
         id: Tasks.length+1,
-        title: tietle,
+        title: title,
         desc: "รายละเอียดของงานที่เพิ่ม",
         date_added: "13/08/2569",
         author: "Thanakron",
@@ -55,17 +61,36 @@ export default function toDoList(){
 
 
     const onEdit = (t) => {
-        alert(`งานที่คุณต้องการแก้ไข ${t}`);
+        //alert(`งานที่คุณต้องการแก้ไข ${t}`)
+        setEditingTask(t);
+
     }
+
+    const updateTask = (id, title, status ) => {
+        setTasks(
+            Tasks => Tasks.map(
+                t => t.id === id ? 
+               { ...t,
+            title: title,
+            status: status
+            } : t
+        )); 
+        setEditingTask(null);
+    } 
+
     const onDelete = (id) => {
-        alert(`คุณต้องการข้อมูล รหัสงาน ${id}?`)
+        //alert(`คุณต้องการลบข้อมูล รหัสงาน ${id}?`)
+        const updateTasks = Tasks.filter(
+            item => item.id != id 
+        );
+        setTasks(updateTasks);
     }
     
     
     
     const tmp = filteredTasks.map((item,index) => {
     const {id, title, desc, author, date_added, status} = item;
-    const [selectedTask, setSelectedTask] = useState(null);
+    
     
     return (<div className="mx-25  w-full max-w-sm p-6 bg-white border border-gray-200 rounded-xl shadow-md text-black" key={id}>
       หัวข้อ {title}
@@ -125,7 +150,12 @@ export default function toDoList(){
 
                 </div>
                  </div>
-                <ToDoFrom addTask={addTask}/>
+                <ToDoFrom 
+                    addTask={addTask}
+                    editingTask = {editingTask}
+                    updateTask= {updateTask}
+                    resetEditingTask= {resetEditingTask}
+                />
 
             <div className="text-black bg-brand box-border border border-transparent hover:bg-brand-strong focus:ring-4 focus:ring-brand-medium shadow-xs font-medium leading-5 rounded-base text-sm px-4 py-2.5 focus:outline-none">งานที่ต้องทำ{numOfTask} x รายการ{}</div>
         <div>
