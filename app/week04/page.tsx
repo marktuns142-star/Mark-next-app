@@ -4,10 +4,10 @@ import Header from "../components/header";
 import Footer from "../components/footer";
 import { dataItem, appendItem } from "../data/dataItem";
 import { useState } from "react";
-import ToDoList from "../week03/page";
+//import ToDoList from "../week03/page";
 import ToDoFrom from "./components/ToDoFrom";
 import Modal from "./components/Modal";
-import { title } from "process";
+//import { title } from "process";
 
 
 export default function toDoList(){
@@ -39,7 +39,7 @@ export default function toDoList(){
     const isActive = (act: boolean) => {
     if (act)
     return <span style={{ color: "green"}}>กำลังศึกษาอยู่</span>;
-    return <span style={{ color: "rad"}}>ไม่ได้เป็นนักศึกษาแล้วนะ</span>;
+    return <span style={{ color: "red"}}>ไม่ได้เป็นนักศึกษาแล้วนะ</span>;
   }
  const addTask = (title, status) => {
     const newTask ={
