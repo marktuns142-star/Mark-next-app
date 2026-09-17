@@ -7,10 +7,11 @@ import { shops } from "./shopItem";
 export default function ShopList({ data }) {
     const [keyword, setKeyword] = useState("");
      
-    const filterShops = shops.filter(
+    //alert (data)
+    const filterShops = data.filter(
         (item) => {
             const searchTxt = keyword.toLowerCase();
-            return item.title.toLowerCase().includes(searchTxt)
+            return item.shopName.toLowerCase().includes(searchTxt)
 
         }
     );
@@ -45,14 +46,14 @@ export default function ShopList({ data }) {
             <div className="space-y-4 ">
                 {
                     filterShops.map(shop => (
-                        <div key={shop.id} className="border rounded-lg p-4" >
+                        <div key={shop.shopId} className="border rounded-lg p-4" >
                           
                             <h2 className="found-semibold">
-                            {shop.title}
+                            {shop.shopName}
                             </h2>
                             <p>Open Status: 
-                                {isActive(shop.openStatus)}</p>
-                            <Link href={`/week07/${shop.id}`} className="inline-block mt-3 bg-blue-600 text-white px-4 py-2 rounded">
+                                {isActive(shop.shopStatus)}</p>
+                            <Link href={`/week07/${shop.shopId}`} className="inline-block mt-3 bg-blue-600 text-white px-4 py-2 rounded">
                             View Datail
                             </Link>
                             
